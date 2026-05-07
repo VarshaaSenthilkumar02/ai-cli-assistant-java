@@ -1,5 +1,8 @@
 package com.varshaa.aiassistant;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -37,7 +40,16 @@ public class Main {
         HttpResponse<String> response =
                 client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("\nAI Response:\n" + response.body());
+         ObjectMapper objectMapper = new ObjectMapper();
+
+         JsonNode jsonNode = objectMapper.readTree(response.body());
+
+         // Step 6: Extract only "response" field
+         String aiResponse = jsonNode.get("response").asText();
+
+         // Step 7: Print clean output
+         System.out.println("\nAI:");
+         System.out.println(aiResponse);
 
         scanner.close();
     }
