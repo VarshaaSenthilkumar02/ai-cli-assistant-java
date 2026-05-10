@@ -20,19 +20,27 @@ public class OllamaService {
         this.objectMapper = new ObjectMapper();
     }
 
-    public String getAIResponse(String prompt) throws Exception {
+    public String getAIResponse(String prompt, String model) throws Exception {
 
-        String escapedPrompt = prompt
+        String systemPrompt = """
+        You are a helpful AI assistant.
+        You explain Java, backend, DSA, and AI concepts clearly for beginners.
+        Keep answers practical and beginner-friendly.
+        """;
+
+        String finalPrompt = systemPrompt + "\n" + prompt;
+
+        String escapedPrompt = finalPrompt
                 .replace("\"", "\\\"")
                 .replace("\n", "\\n");
 
         String requestBody = """
                 {
-                    "model": "llama3",
+                    "model": "%s",
                     "prompt": "%s",
                     "stream": false
                 }
-                """.formatted(escapedPrompt);
+                """.formatted(model, escapedPrompt);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:11434/api/generate"))

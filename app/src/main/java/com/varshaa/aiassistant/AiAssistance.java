@@ -1,5 +1,7 @@
 package com.varshaa.aiassistant;
 
+import com.varshaa.aiassistant.command.CommandHandler;
+import com.varshaa.aiassistant.config.AppConfig;
 import com.varshaa.aiassistant.service.OllamaService;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +10,7 @@ import java.util.Scanner;
 
 public class AiAssistance {
 
-     static void main(String[] args) throws Exception {
+     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
@@ -19,46 +21,23 @@ public class AiAssistance {
          StringBuilder conversationHistory = new StringBuilder();
 
          OllamaService aiModel = new OllamaService();
+         CommandHandler handler = new CommandHandler();
+         AppConfig config = new AppConfig();
 
         while(true) {
 
             LocalDateTime currentTime = LocalDateTime.now();
             String time = currentTime.format(formatter).toUpperCase();
+            String model = config.getCurrentConfig();
 
             System.out.print("[" + time + "] You : ");
             String userInput = scanner.nextLine();
 
+            if(handler.handleCommand(userInput, conversationHistory, config)) continue;
+
             if(userInput.equalsIgnoreCase("/exit")) {
                 System.out.println("AI Assistance Stopped!");
                 break;
-            }
-
-            if(userInput.trim().isEmpty()) {
-                System.out.println("Please enter a valid input!!!");
-                continue;
-            }
-
-            if (userInput.equalsIgnoreCase("/help")) {
-                System.out.println("""
-                        Available Commands:
-                        /help    -> Show commands
-                        /history -> Show chat history
-                        /clear   -> Clear memory
-                        /exit    -> Stop assistant
-                        """);
-                continue;
-            }
-
-            if(userInput.equalsIgnoreCase("/clear")) {
-                conversationHistory.setLength(0);
-                System.out.println("== Conversation History Cleared! ==");
-                continue;
-            }
-
-            if(userInput.equalsIgnoreCase("/history")) {
-                System.out.println("== Conversation History: ==");
-                System.out.println(conversationHistory);
-                continue;
             }
 
             conversationHistory.append("User: ")
@@ -66,13 +45,11 @@ public class AiAssistance {
                     .append("\n");
 
             try {
-                // Step 6: Extract only "response" field
-                String aiResponse = aiModel.getAIResponse(conversationHistory.toString());
+                String aiResponse = aiModel.getAIResponse(conversationHistory.toString(), model);
                 conversationHistory.append("AI Response: ")
                         .append(aiResponse)
                         .append("\n");
 
-                // Step 7: Print clean output
                 System.out.println("\n[" + time + "]AI : ");
                 System.out.println(aiResponse);
             } catch (Exception e) {
