@@ -1,0 +1,32 @@
+package com.varshaa.aiassistant.storage;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class ConversationStorage {
+
+    private static final String FILE_NAME = "conversation.txt";
+
+    public void saveConversation(String conversationHistory) {
+
+        try {
+            Files.writeString(Path.of(FILE_NAME), conversationHistory);
+        } catch (IOException e) {
+            System.out.println("Unable to save conversation!");
+        }
+    }
+
+    public String loadConversation() {
+
+        try {
+            if (Files.exists(Path.of(FILE_NAME))) {
+                return Files.readString(Path.of(FILE_NAME));
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to load conversation!");
+        }
+
+        return "";
+    }
+}
