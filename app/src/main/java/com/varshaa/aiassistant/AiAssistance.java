@@ -16,15 +16,32 @@ public class AiAssistance {
 
         Scanner scanner = new Scanner(System.in);
 
-         System.out.println("=== AI Assistant Started ===");
-         System.out.println("Type 'exit' to stop.\n");
-
          DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
 
          OllamaService aiModel = new OllamaService();
          CommandHandler handler = new CommandHandler();
          AppConfig config = new AppConfig();
          ConversationStorage conversationStrg = new ConversationStorage();
+
+         System.out.println("""
+                 =====================================
+                         AI CLI ASSISTANT
+                 =====================================
+                 Model : %s
+                 Role  : %s
+                 
+                 Commands:
+                     /help
+                     /history
+                     /clear
+                     /role
+                     /model
+                     /exit
+                 =====================================
+                 """.formatted(
+                 config.getCurrentConfig(),
+                 config.getCurrentRole()
+         ));
 
          StringBuilder conversationHistory = new StringBuilder(conversationStrg.loadConversation());
 
@@ -37,6 +54,11 @@ public class AiAssistance {
 
             System.out.print("[" + time + "] You : ");
             String userInput = scanner.nextLine();
+
+             if(userInput.trim().isEmpty()) {
+                 System.out.println("Input cannot be empty.");
+                 continue;
+             }
 
             if(handler.handleCommand(userInput, conversationHistory, config, conversationStrg)) continue;
 

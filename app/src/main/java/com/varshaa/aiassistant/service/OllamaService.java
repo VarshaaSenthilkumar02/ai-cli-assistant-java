@@ -3,11 +3,13 @@ package com.varshaa.aiassistant.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 import static java.time.Duration.ofSeconds;
@@ -27,6 +29,7 @@ public class OllamaService {
         String systemPrompt = buildSystemPrompt(role);
 
         String finalPrompt = systemPrompt + "\n" + prompt;
+        String line;
 
         String escapedPrompt = finalPrompt
                 .replace("\"", "\\\"")
@@ -36,7 +39,7 @@ public class OllamaService {
                 {
                     "model": "%s",
                     "prompt": "%s",
-                    "stream": false
+                    "stream": true
                 }
                 """.formatted(model, escapedPrompt);
 
@@ -47,12 +50,26 @@ public class OllamaService {
                 .timeout(ofSeconds(60))
                 .build();
 
-        HttpResponse<String> response =
-                client.send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("Generating Response.....");
 
-        JsonNode jsonNode = objectMapper.readTree(response.body());
+        HttpResponse<InputStream> response =
+                client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(response.body()));
 
-        return jsonNode.get("response").asText();
+        StringBuilder fullResponse = new StringBuilder();
+
+        while((line = reader.readLine()) != null) {
+            JsonNode jsonNode = objectMapper.readTree(line);
+            if(jsonNode.get("response") != null) {
+                String token = jsonNode.get("response").asText();
+                System.out.print(token);
+                Thread.sleep(20);
+                fullResponse.append(token);
+            }
+        }
+
+        System.out.println();
+        return fullResponse.toString();
     }
 
     private String buildSystemPrompt(String role) {

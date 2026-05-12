@@ -36,6 +36,19 @@ public class CommandHandler {
             return true;
         }
 
+        if(userInput.equalsIgnoreCase("/models")) {
+
+            System.out.println("""
+            Available Models:
+            llama3
+            mistral
+            gemma
+            phi3
+            """);
+
+            return true;
+        }
+
         if(userInput.startsWith("/model ")) {
 
             String modelName = userInput.replace("/model ", "").trim();
