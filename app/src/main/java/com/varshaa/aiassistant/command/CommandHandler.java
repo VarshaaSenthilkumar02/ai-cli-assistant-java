@@ -1,12 +1,12 @@
 package com.varshaa.aiassistant.command;
 
 import com.varshaa.aiassistant.config.AppConfig;
-import com.varshaa.aiassistant.storage.ConversationStorage;
+import com.varshaa.aiassistant.storage.ConversationManager;
 
 public class CommandHandler {
 
     public boolean handleCommand(String userInput,
-                                 StringBuilder conversationHistory, AppConfig config, ConversationStorage storage) {
+                                 ConversationManager conversationManager, AppConfig config) {
 
         if(userInput.equalsIgnoreCase("/help")) {
 
@@ -22,8 +22,7 @@ public class CommandHandler {
 
         if(userInput.equalsIgnoreCase("/clear")) {
 
-            conversationHistory.setLength(0);
-            storage.saveConversation(conversationHistory.toString());
+            conversationManager.clearHistory();
             System.out.println("== Conversation History Cleared! ==");
             return true;
         }
@@ -31,8 +30,7 @@ public class CommandHandler {
         if(userInput.equalsIgnoreCase("/history")) {
 
             System.out.println("== Conversation History ==");
-            System.out.println(conversationHistory);
-
+            System.out.println(conversationManager.getConversationHistory());
             return true;
         }
 
@@ -60,7 +58,7 @@ public class CommandHandler {
         if(userInput.startsWith("/role ")) {
             String role = userInput.replace("/role ", "").trim();
             config.setCurrentRole(role);
-            conversationHistory.setLength(0);
+            conversationManager.clearHistory();
             System.out.println("Taking the role of : " + role);
             return true;
         }
