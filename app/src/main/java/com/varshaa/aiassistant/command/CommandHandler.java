@@ -11,12 +11,40 @@ public class CommandHandler {
         if(userInput.equalsIgnoreCase("/help")) {
 
             System.out.println("""
-                    Available Commands:
-                    /help    -> Show commands
-                    /history -> Show chat history
-                    /clear   -> Clear memory
-                    /exit    -> Stop assistant
-                    """);
+            =====================================
+                    AVAILABLE COMMANDS
+            =====================================
+
+            /help
+                Show all commands
+
+            /history
+                Show conversation history
+
+            /clear
+                Clear conversation memory
+
+            /models
+                Show available AI models
+
+            /model <name>
+                Change current AI model
+
+            /role <name>
+                Change AI personality
+
+            /about
+                About this application
+
+            /exit
+                Stop assistant
+
+            /save
+                Export Conversation History
+
+            =====================================
+            """);
+
             return true;
         }
 
@@ -60,6 +88,40 @@ public class CommandHandler {
             config.setCurrentRole(role);
             conversationManager.clearHistory();
             System.out.println("Taking the role of : " + role);
+            return true;
+        }
+
+        if(userInput.equalsIgnoreCase("/about")) {
+
+            System.out.println("""
+            =====================================
+                    AI CLI ASSISTANT
+            =====================================
+
+            Built using:
+            - Java
+            - Ollama
+            - Local LLM Models
+
+            Features:
+            - Streaming AI responses
+            - Conversation memory
+            - Role switching
+            - Model switching
+            - Persistent chat history
+
+            Developed by Varshaa
+
+            =====================================
+            """);
+
+            return true;
+        }
+
+        if(userInput.equalsIgnoreCase("/save")) {
+
+            conversationManager.saveConversation();
+            System.out.println("Conversation saved successfully!");
             return true;
         }
 

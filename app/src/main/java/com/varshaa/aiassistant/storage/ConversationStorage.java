@@ -20,13 +20,28 @@ public class ConversationStorage {
     public String loadConversation() {
 
         try {
-            if (Files.exists(Path.of(FILE_NAME))) {
-                return Files.readString(Path.of(FILE_NAME));
-            }
+            if (Files.exists(Path.of(FILE_NAME))) return Files.readString(Path.of(FILE_NAME));
+
         } catch (IOException e) {
             System.out.println("Unable to load conversation!");
         }
-
         return "";
+    }
+
+    public void exportConversation(String conversationHistory) {
+
+        try {
+
+            Files.createDirectories(Path.of("conversations"));
+            String fileName = "conversations/chat-" + System.currentTimeMillis() + ".txt";
+
+            Files.writeString(
+                    Path.of(fileName),
+                    conversationHistory
+            );
+            System.out.println("Conversation exported to : " + fileName);
+        } catch (IOException e) {
+            System.out.println("Unable to export conversation!");
+        }
     }
 }

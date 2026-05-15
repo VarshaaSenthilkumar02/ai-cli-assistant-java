@@ -21,6 +21,8 @@ public class AiAssistance {
         CommandHandler handler = new CommandHandler();
         AppConfig config = new AppConfig();
         ConversationManager conversationManager = new ConversationManager();
+        LocalDateTime startTime = LocalDateTime.now();
+        String sessionStartTime = startTime.format(formatter);
 
         System.out.println("""
                  =====================================
@@ -28,6 +30,7 @@ public class AiAssistance {
                  =====================================
                  Model : %s
                  Role  : %s
+                 Session StartTime : %s
 
                  Commands:
                      /help
@@ -35,9 +38,11 @@ public class AiAssistance {
                      /clear
                      /role
                      /model
+                     /save
+                     /about
                      /exit
                  =====================================
-                 """.formatted(config.getCurrentConfig(), config.getCurrentRole()));
+                 """.formatted(config.getCurrentConfig(), config.getCurrentRole(), sessionStartTime));
 
         while(true) {
             LocalDateTime currentTime =

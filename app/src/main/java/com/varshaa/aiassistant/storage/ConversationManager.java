@@ -38,4 +38,8 @@ public class ConversationManager {
     private void save() {
         storage.saveConversation(conversationHistory.toString());
     }
+
+    public void saveConversation() {
+        storage.exportConversation(conversationHistory.toString());
+    }
 }
