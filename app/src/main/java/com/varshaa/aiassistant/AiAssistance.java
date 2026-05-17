@@ -73,7 +73,7 @@ public class AiAssistance {
             try {
 
                 System.out.print("\n[" + time + "]AI : ");
-                String aiResponse = aiModel.getAIResponse(conversationManager.getConversationHistory(), model, role);
+                String aiResponse = aiModel.getAIResponse(conversationManager.getPersistentHistory(), model, role);
                 conversationManager.addAIMessage(aiResponse);
 
             } catch (Exception e) {

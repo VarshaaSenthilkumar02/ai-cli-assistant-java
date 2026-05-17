@@ -58,7 +58,7 @@ public class CommandHandler {
         if(userInput.equalsIgnoreCase("/history")) {
 
             System.out.println("== Conversation History ==");
-            System.out.println(conversationManager.getConversationHistory());
+            System.out.println(conversationManager.getPersistentHistory());
             return true;
         }
 

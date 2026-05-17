@@ -2,16 +2,22 @@ package com.varshaa.aiassistant.storage;
 
 public class ConversationManager {
 
-    private final StringBuilder conversationHistory;
+    private final StringBuilder persistentHistory;
     private final ConversationStorage storage;
+    private final StringBuilder sessionHistory;
 
     public ConversationManager() {
         this.storage = new ConversationStorage();
-        this.conversationHistory = new StringBuilder(storage.loadConversation());
+        this.persistentHistory = new StringBuilder(storage.loadConversation());
+        this.sessionHistory = new StringBuilder();
     }
 
     public void addUserMessage(String message) {
-        conversationHistory
+        persistentHistory
+                .append("User: ")
+                .append(message)
+                .append("\n");
+        sessionHistory
                 .append("User: ")
                 .append(message)
                 .append("\n");
@@ -19,27 +25,32 @@ public class ConversationManager {
     }
 
     public void addAIMessage(String message) {
-        conversationHistory
+        persistentHistory
+                .append("AI: ")
+                .append(message)
+                .append("\n");
+        sessionHistory
                 .append("AI: ")
                 .append(message)
                 .append("\n");
         save();
     }
 
-    public String getConversationHistory() {
-        return conversationHistory.toString();
+    public String getPersistentHistory() {
+        return persistentHistory.toString();
     }
 
     public void clearHistory() {
-        conversationHistory.setLength(0);
+        persistentHistory.setLength(0);
+        sessionHistory.setLength(0);
         save();
     }
 
     private void save() {
-        storage.saveConversation(conversationHistory.toString());
+        storage.saveConversation(persistentHistory.toString());
     }
 
     public void saveConversation() {
-        storage.exportConversation(conversationHistory.toString());
+        storage.exportConversation(sessionHistory.toString());
     }
 }
