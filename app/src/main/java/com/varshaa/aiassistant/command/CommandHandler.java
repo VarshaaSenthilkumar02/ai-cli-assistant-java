@@ -41,6 +41,12 @@ public class CommandHandler {
 
             /save
                 Export Conversation History
+            
+            /new
+                Start a fresh session
+            
+            /staus
+                show current assistant configuration
 
             =====================================
             """);
@@ -118,10 +124,30 @@ public class CommandHandler {
             return true;
         }
 
+        if(userInput.equalsIgnoreCase("/status")) {
+
+            System.out.println("""
+        ====== AI Assistant Status ======
+
+        Current Model : %s
+        Current Role  : %s
+
+        ================================
+        """.formatted(config.getCurrentConfig(), config.getCurrentRole()));
+
+            return true;
+        }
+
         if(userInput.equalsIgnoreCase("/save")) {
 
             conversationManager.saveConversation();
             System.out.println("Conversation saved successfully!");
+            return true;
+        }
+
+        if(userInput.equalsIgnoreCase("/new")) {
+            conversationManager.clearSessionHistory();
+            System.out.println("Started a new chat session");
             return true;
         }
 

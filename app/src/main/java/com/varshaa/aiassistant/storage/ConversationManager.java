@@ -46,6 +46,14 @@ public class ConversationManager {
         save();
     }
 
+    public void clearSessionHistory() {
+        sessionHistory.setLength(0);
+    }
+
+    public String getCurrentConversationContext() {
+        return sessionHistory.toString();
+    }
+
     private void save() {
         storage.saveConversation(persistentHistory.toString());
     }

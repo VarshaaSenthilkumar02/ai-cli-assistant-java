@@ -17,6 +17,6 @@ public class AppConfig {
     }
 
     public void setCurrentRole(String role) {
-        this.currentRole = currentRole;
+        this.currentRole = role;
     }
 }

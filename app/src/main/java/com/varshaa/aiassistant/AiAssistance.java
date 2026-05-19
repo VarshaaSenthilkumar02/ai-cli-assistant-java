@@ -40,6 +40,7 @@ public class AiAssistance {
                      /model
                      /save
                      /about
+                     /new
                      /exit
                  =====================================
                  """.formatted(config.getCurrentConfig(), config.getCurrentRole(), sessionStartTime));
@@ -73,7 +74,8 @@ public class AiAssistance {
             try {
 
                 System.out.print("\n[" + time + "]AI : ");
-                String aiResponse = aiModel.getAIResponse(conversationManager.getPersistentHistory(), model, role);
+                String aiResponse = aiModel.getAIResponse(conversationManager.getCurrentConversationContext(), model,
+                        role);
                 conversationManager.addAIMessage(aiResponse);
 
             } catch (Exception e) {
