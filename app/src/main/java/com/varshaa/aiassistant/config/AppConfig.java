@@ -19,4 +19,11 @@ public class AppConfig {
     public void setCurrentRole(String role) {
         this.currentRole = role;
     }
+
+    public boolean isValidRole(String role) {
+        return role.equalsIgnoreCase("teacher")
+                || role.equalsIgnoreCase("mentor")
+                || role.equalsIgnoreCase("interviewer")
+                || role.equalsIgnoreCase("default");
+    }
 }

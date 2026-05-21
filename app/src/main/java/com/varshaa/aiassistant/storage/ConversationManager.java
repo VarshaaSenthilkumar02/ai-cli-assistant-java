@@ -61,4 +61,6 @@ public class ConversationManager {
     public void saveConversation() {
         storage.exportConversation(sessionHistory.toString());
     }
+
+    public void listSessions() { storage.listConversations(); }
 }

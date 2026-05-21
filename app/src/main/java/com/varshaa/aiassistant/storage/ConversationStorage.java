@@ -1,5 +1,6 @@
 package com.varshaa.aiassistant.storage;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,5 +44,17 @@ public class ConversationStorage {
         } catch (IOException e) {
             System.out.println("Unable to export conversation!");
         }
+    }
+
+    public void listConversations() {
+        File folder = new File("conversations");
+        File[] files = folder.listFiles();
+
+        if(files == null || files.length == 0) {
+            System.out.println("No Conversations to show");
+            return;
+        }
+
+        for(File file : files) System.out.println(file.getName());
     }
 }

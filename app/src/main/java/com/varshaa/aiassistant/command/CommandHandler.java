@@ -47,6 +47,9 @@ public class CommandHandler {
             
             /staus
                 show current assistant configuration
+            
+            /sessions
+                Show saved chat sessions
 
             =====================================
             """);
@@ -90,10 +93,21 @@ public class CommandHandler {
         }
 
         if(userInput.startsWith("/role ")) {
+
             String role = userInput.replace("/role ", "").trim();
+
+            if(!config.isValidRole(role)) {
+                System.out.println("""
+                Invalid role!
+
+                Use /listroles to see available roles.""");
+
+                return true;
+            }
+
             config.setCurrentRole(role);
-            conversationManager.clearHistory();
             System.out.println("Taking the role of : " + role);
+
             return true;
         }
 
@@ -148,6 +162,23 @@ public class CommandHandler {
         if(userInput.equalsIgnoreCase("/new")) {
             conversationManager.clearSessionHistory();
             System.out.println("Started a new chat session");
+            return true;
+        }
+
+        if(userInput.equalsIgnoreCase("/sessions")) {
+            conversationManager.listSessions();
+            return true;
+        }
+
+        if(userInput.equalsIgnoreCase("/listroles")) {
+            System.out.println("""
+            Available Roles:
+
+            teacher
+            mentor
+            interviewer
+            default
+            """);
             return true;
         }
 
