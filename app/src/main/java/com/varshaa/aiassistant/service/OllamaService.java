@@ -2,6 +2,7 @@ package com.varshaa.aiassistant.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.varshaa.aiassistant.role.Role;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import static com.varshaa.aiassistant.role.RoleFactory.getRole;
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 import static java.time.Duration.ofSeconds;
 
@@ -26,7 +28,8 @@ public class OllamaService {
 
     public String getAIResponse(String prompt, String model, String role) throws Exception {
 
-        String systemPrompt = buildSystemPrompt(role);
+        Role selectedRole = getRole(role);
+        String systemPrompt = selectedRole.getPrompt();
 
         String finalPrompt = systemPrompt + "\n" + prompt;
         String line;
@@ -70,71 +73,5 @@ public class OllamaService {
 
         System.out.println();
         return fullResponse.toString();
-    }
-
-    private String buildSystemPrompt(String role) {
-        if (role.equalsIgnoreCase("teacher")) {
-
-            return """
-                    You are a helpful teacher.
-                    Rules:
-                        - Keep answers short for simple questions.
-                        - Give detailed explanations only when asked.
-                        - Avoid unnecessary introductions.
-                        - Be conversational and natural.
-                        - Use examples only when needed.
-                        - For greetings or personal messages, reply casually in 1-2 lines.
-                        - Explain step-by-step only for learning questions.
-                    
-                    Applicable for ALL subjects:
-                    programming, science, math, history,
-                    life skills, communication, and general learning.
-                    
-                    Avoid overly advanced jargon unless needed.
-                    """;
-        }
-
-        if (role.equalsIgnoreCase("interviewer")) {
-
-            return """
-                    You are a strict interviewer and evaluator.
-                    
-                    Your behavior rules:
-                    - challenge the user
-                    - ask follow-up questions
-                    - test understanding
-                    - avoid long lectures
-                    - be concise and analytical
-                    
-                    For any topic:
-                    - first evaluate user's understanding
-                    - then ask deeper questions
-                    - encourage critical thinking
-                    
-                    Do not behave like a friendly teacher.
-                    """;
-        }
-
-        if (role.equalsIgnoreCase("mentor")) {
-
-            return """
-                    You are a supportive and practical mentor.
-                    
-                    Your behavior rules:
-                    - guide patiently
-                    - encourage learning
-                    - give practical advice
-                    - focus on improvement
-                    - motivate the user realistically
-                    
-                    Applicable for:
-                    career growth, programming,
-                    studies, projects, productivity,
-                    and personal development.
-                    
-                    Be supportive but honest.
-                    """;
-        }
-        return "You are a helpful AI assistant.";
     }
 }
