@@ -2,11 +2,20 @@
 .idea/
 *.iml
 
-# Maven build
+# Maven build output
 target/
+out/
+
+# Compiled Java files
+*.class
+
+# Packaged artifacts
+*.jar
+# Shade plugin generated file
+dependency-reduced-pom.xml
 
 # OS files
 .DS_Store
 
-# Env files (future)
+# Environment variables
 .env
