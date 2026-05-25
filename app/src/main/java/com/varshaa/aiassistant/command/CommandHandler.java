@@ -160,9 +160,8 @@ public class CommandHandler {
         }
 
         if(userInput.equalsIgnoreCase("/new")) {
-            conversationManager.clearSessionHistory();
-            System.out.println("Started a new chat session");
-            return true;
+            Command command = new NewChatCommand(conversationManager);
+            return command.execute(userInput);
         }
 
         if(userInput.equalsIgnoreCase("/sessions")) {

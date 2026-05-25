@@ -1,0 +1,21 @@
+package com.varshaa.aiassistant.command;
+
+import com.varshaa.aiassistant.storage.ConversationManager;
+
+public class NewChatCommand implements Command{
+    private final ConversationManager conversationManager;
+
+    public NewChatCommand(ConversationManager conversationManager) {
+        this.conversationManager = conversationManager;
+    }
+
+    @Override
+    public boolean execute(String userInput) {
+        if(userInput.equalsIgnoreCase("/new")) {
+            conversationManager.clearSessionHistory();
+            System.out.println("Started a new chat session.");
+            return true;
+        }
+        return false;
+    }
+}
