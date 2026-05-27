@@ -1,6 +1,6 @@
 package com.varshaa.aiassistant.role;
 
-public class InterviewerRole implements Role{
+public class InterviewerRole implements Role {
     @Override
     public String getPrompt() {
         return """

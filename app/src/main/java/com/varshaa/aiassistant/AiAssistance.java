@@ -18,9 +18,9 @@ public class AiAssistance {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("hh:mm a");
         OllamaService aiModel = new OllamaService();
-        CommandHandler handler = new CommandHandler();
         AppConfig config = new AppConfig();
         ConversationManager conversationManager = new ConversationManager();
+        CommandHandler handler = new CommandHandler(conversationManager, config);
         LocalDateTime startTime = LocalDateTime.now();
         String sessionStartTime = startTime.format(formatter);
 
@@ -64,7 +64,7 @@ public class AiAssistance {
                 continue;
             }
 
-            if(handler.handleCommand(userInput, conversationManager, config)) continue;
+            if(handler.handleCommand(userInput)) continue;
 
             if(userInput.equalsIgnoreCase("/exit")) {
                 System.out.println("AI Assistance Stopped!");

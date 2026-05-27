@@ -1,6 +1,6 @@
 package com.varshaa.aiassistant.role;
 
-public class MentorRole implements Role{
+public class MentorRole implements Role {
     @Override
     public String getPrompt() {
         return """
