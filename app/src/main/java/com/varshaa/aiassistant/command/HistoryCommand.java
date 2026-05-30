@@ -20,4 +20,14 @@ public class HistoryCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/history - Show conversation history";
+    }
+
+    @Override
+    public String commandName() {
+        return "/history";
+    }
 }

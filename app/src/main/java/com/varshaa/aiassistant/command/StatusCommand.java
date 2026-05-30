@@ -23,4 +23,14 @@ public class StatusCommand implements Command {
     """.formatted(config.getCurrentConfig(), config.getCurrentRole()));
         return true;
     }
+
+    @Override
+    public String description() {
+        return "/status - Show current assistant configuration";
+    }
+
+    @Override
+    public String commandName() {
+        return "/status";
+    }
 }

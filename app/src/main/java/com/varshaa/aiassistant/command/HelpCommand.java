@@ -1,56 +1,46 @@
 package com.varshaa.aiassistant.command;
 
+import java.util.List;
+
 public class HelpCommand implements Command{
+    private final List<Command> commands;
+
+    public HelpCommand(List<Command> commands) {
+        this.commands = commands;
+    }
+
     @Override
     public boolean execute(String userInput) {
-        if(userInput.equalsIgnoreCase("/help")) {
 
-            System.out.println("""
-            =====================================
-                    AVAILABLE COMMANDS
-            =====================================
-
-            /help
-                Show all commands
-
-            /history
-                Show conversation history
-
-            /clear
-                Clear conversation memory
-
-            /models
-                Show available AI models
-
-            /model <name>
-                Change current AI model
-
-            /role <name>
-                Change AI personality
-
-            /about
-                About this application
-
-            /exit
-                Stop assistant
-
-            /save
-                Export Conversation History
-            
-            /new
-                Start a fresh session
-            
-            /staus
-                show current assistant configuration
-            
-            /sessions
-                Show saved chat sessions
-
-            =====================================
-            """);
-
-            return true;
+        if(!userInput.equalsIgnoreCase("/help")) {
+            return false;
         }
-        return false;
+
+        System.out.println("""
+    =====================================
+            AVAILABLE COMMANDS
+    =====================================
+    """);
+
+        for(Command command : commands) {
+            System.out.println(command.description());
+        }
+
+        System.out.println("""
+    
+    =====================================
+    """);
+
+        return true;
+    }
+
+    @Override
+    public String description() {
+        return "/help - Show all commands";
+    }
+
+    @Override
+    public String commandName() {
+        return "/help";
     }
 }

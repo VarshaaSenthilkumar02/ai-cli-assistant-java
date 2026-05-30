@@ -16,4 +16,14 @@ public class ListRolesCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/listaRoles - List all the available roles";
+    }
+
+    @Override
+    public String commandName() {
+        return "/listroles";
+    }
 }

@@ -18,4 +18,14 @@ public class NewChatCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/new - Start a fresh session";
+    }
+
+    @Override
+    public String commandName() {
+        return "/new";
+    }
 }

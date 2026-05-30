@@ -31,4 +31,14 @@ public class AboutCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/about - About this application";
+    }
+
+    @Override
+    public String commandName() {
+        return "/about";
+    }
 }

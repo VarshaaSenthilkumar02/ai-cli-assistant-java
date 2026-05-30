@@ -3,31 +3,78 @@ package com.varshaa.aiassistant.command;
 import com.varshaa.aiassistant.config.AppConfig;
 import com.varshaa.aiassistant.storage.ConversationManager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CommandHandler {
 
     private final List<Command> commandList;
+    private final Map<String, Command> commandRegistry;
 
-    public CommandHandler(ConversationManager conversationManager, AppConfig config) {
-        this.commandList = List.of(new NewChatCommand(conversationManager),
-                new StatusCommand(config),
-                new SaveChatCommand(conversationManager),
-                new HelpCommand(),
-                new ClearChatCommand(conversationManager),
-                new HistoryCommand(conversationManager),
-                new ListModelsCommand(),
-                new ModelCommand(config),
-                new ListRolesCommand(),
-                new SessionsCommand(conversationManager),
-                new RoleCommand(config));
+    public CommandHandler(
+            ConversationManager conversationManager,
+            AppConfig config) {
+
+        this.commandList = new ArrayList<>();
+        this.commandRegistry = new HashMap<>();
+
+        commandList.add(new NewChatCommand(conversationManager));
+        commandList.add(new StatusCommand(config));
+        commandList.add(new HelpCommand(commandList));
+        commandList.add(new ClearChatCommand(conversationManager));
+        commandList.add(new HistoryCommand(conversationManager));
+        commandList.add(new ListRolesCommand());
+        commandList.add(new ListModelsCommand());
+        commandList.add(new SessionsCommand(conversationManager));
+        commandList.add(new AboutCommand());
+        commandList.add(new SaveChatCommand(conversationManager));
+
+        // Don't add these to registry yet
+        commandList.add(new RoleCommand(config));
+        commandList.add(new ModelCommand(config));
+
+        for (Command command : commandList) {
+
+            if(command.commandName().equals("/role") ||
+                    command.commandName().equals("/model")) {
+                continue;
+            }
+
+            commandRegistry.put(
+                    command.commandName(),
+                    command
+            );
+        }
     }
 
     public boolean handleCommand(String userInput) {
 
-        for(Command command : commandList) {
-            if(command.execute(userInput)) return true;
+        Command command = commandRegistry.get(userInput);
+
+        if(command != null) {
+            return command.execute(userInput);
         }
+
+        if(userInput.startsWith("/role ")) {
+
+            for(Command cmd : commandList) {
+                if(cmd.commandName().equals("/role")) {
+                    return cmd.execute(userInput);
+                }
+            }
+        }
+
+        if(userInput.startsWith("/model ")) {
+
+            for(Command cmd : commandList) {
+                if(cmd.commandName().equals("/model")) {
+                    return cmd.execute(userInput);
+                }
+            }
+        }
+
         return false;
     }
 }

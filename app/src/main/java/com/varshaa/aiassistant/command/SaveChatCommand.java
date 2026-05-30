@@ -19,4 +19,14 @@ public class SaveChatCommand implements Command {
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/save - Export conversation history";
+    }
+
+    @Override
+    public String commandName() {
+        return "/save";
+    }
 }

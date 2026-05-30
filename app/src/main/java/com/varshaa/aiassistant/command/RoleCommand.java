@@ -31,4 +31,14 @@ public class RoleCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/role <name> - change the role";
+    }
+
+    @Override
+    public String commandName() {
+        return "/role";
+    }
 }

@@ -17,4 +17,14 @@ public class ListModelsCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/models - List AI model";
+    }
+
+    @Override
+    public String commandName() {
+        return "/models";
+    }
 }

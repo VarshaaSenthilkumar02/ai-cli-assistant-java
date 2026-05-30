@@ -20,4 +20,14 @@ public class ClearChatCommand implements  Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/clear - Clear conversation memory";
+    }
+
+    @Override
+    public String commandName() {
+        return "/clear";
+    }
 }

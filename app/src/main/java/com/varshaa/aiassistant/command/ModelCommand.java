@@ -20,4 +20,14 @@ public class ModelCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/model <name> - change AI model";
+    }
+
+    @Override
+    public String commandName() {
+        return "/model";
+    }
 }

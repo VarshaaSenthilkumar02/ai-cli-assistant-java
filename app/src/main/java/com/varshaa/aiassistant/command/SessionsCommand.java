@@ -17,4 +17,14 @@ public class SessionsCommand implements Command{
         }
         return false;
     }
+
+    @Override
+    public String description() {
+        return "/sessions - Show saved chat sessions";
+    }
+
+    @Override
+    public String commandName() {
+        return "/sessions";
+    }
 }
