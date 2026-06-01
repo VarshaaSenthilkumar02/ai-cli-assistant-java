@@ -26,4 +26,9 @@ public class ListRolesCommand implements Command{
     public String commandName() {
         return "/listroles";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/role");
+    }
 }

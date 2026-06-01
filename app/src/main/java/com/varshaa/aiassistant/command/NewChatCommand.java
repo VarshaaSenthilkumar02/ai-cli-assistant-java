@@ -28,4 +28,9 @@ public class NewChatCommand implements Command{
     public String commandName() {
         return "/new";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/new");
+    }
 }

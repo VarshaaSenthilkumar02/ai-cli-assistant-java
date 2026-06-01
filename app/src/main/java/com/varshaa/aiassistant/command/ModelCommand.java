@@ -30,4 +30,9 @@ public class ModelCommand implements Command{
     public String commandName() {
         return "/model";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.startsWith("/model ");
+    }
 }

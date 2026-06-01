@@ -33,4 +33,9 @@ public class StatusCommand implements Command {
     public String commandName() {
         return "/status";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("status");
+    }
 }

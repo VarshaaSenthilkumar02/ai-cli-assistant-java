@@ -4,4 +4,5 @@ public interface Command {
     boolean execute(String userInput);
     String description();
     String commandName();
+    boolean matches(String input);
 }

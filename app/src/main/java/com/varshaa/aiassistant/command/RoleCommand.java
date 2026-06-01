@@ -41,4 +41,9 @@ public class RoleCommand implements Command{
     public String commandName() {
         return "/role";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.startsWith("/role ");
+    }
 }

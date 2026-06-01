@@ -43,4 +43,9 @@ public class HelpCommand implements Command{
     public String commandName() {
         return "/help";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/help");
+    }
 }

@@ -27,4 +27,9 @@ public class ListModelsCommand implements Command{
     public String commandName() {
         return "/models";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/models");
+    }
 }

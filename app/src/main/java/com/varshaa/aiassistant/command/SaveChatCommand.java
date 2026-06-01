@@ -29,4 +29,9 @@ public class SaveChatCommand implements Command {
     public String commandName() {
         return "/save";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/save");
+    }
 }

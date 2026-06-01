@@ -30,4 +30,9 @@ public class HistoryCommand implements Command{
     public String commandName() {
         return "/history";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/history");
+    }
 }

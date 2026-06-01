@@ -41,4 +41,9 @@ public class AboutCommand implements Command{
     public String commandName() {
         return "/about";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/about");
+    }
 }

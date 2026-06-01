@@ -30,4 +30,9 @@ public class ClearChatCommand implements  Command{
     public String commandName() {
         return "/clear";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/clear");
+    }
 }

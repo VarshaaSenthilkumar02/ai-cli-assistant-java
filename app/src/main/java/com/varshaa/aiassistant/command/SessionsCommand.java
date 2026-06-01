@@ -27,4 +27,9 @@ public class SessionsCommand implements Command{
     public String commandName() {
         return "/sessions";
     }
+
+    @Override
+    public boolean matches(String input) {
+        return input.equalsIgnoreCase("/sessions");
+    }
 }
