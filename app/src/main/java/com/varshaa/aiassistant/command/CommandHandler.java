@@ -1,6 +1,7 @@
 package com.varshaa.aiassistant.command;
 
 import com.varshaa.aiassistant.config.AppConfig;
+import com.varshaa.aiassistant.service.OllamaService;
 import com.varshaa.aiassistant.storage.ConversationManager;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class CommandHandler {
 
     public CommandHandler(
             ConversationManager conversationManager,
-            AppConfig config) {
+            AppConfig config, OllamaService ollamaService) {
 
         this.commandList = new ArrayList<>();
         this.commandRegistry = new HashMap<>();
@@ -34,6 +35,7 @@ public class CommandHandler {
         // Don't add these to registry yet
         commandList.add(new RoleCommand(config));
         commandList.add(new ModelCommand(config));
+        commandList.add(new SummaryCommand(conversationManager, ollamaService, config));
 
         for (Command command : commandList) {
 

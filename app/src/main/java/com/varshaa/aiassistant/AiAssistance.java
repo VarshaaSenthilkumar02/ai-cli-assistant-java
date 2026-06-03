@@ -20,7 +20,7 @@ public class AiAssistance {
         OllamaService aiModel = new OllamaService();
         AppConfig config = new AppConfig();
         ConversationManager conversationManager = new ConversationManager();
-        CommandHandler handler = new CommandHandler(conversationManager, config);
+        CommandHandler handler = new CommandHandler(conversationManager, config, aiModel);
         LocalDateTime startTime = LocalDateTime.now();
         String sessionStartTime = startTime.format(formatter);
 
@@ -44,6 +44,7 @@ public class AiAssistance {
                      /status
                      /sessions
                      /exit
+                     /summary
                  =====================================
                  """.formatted(config.getCurrentConfig(), config.getCurrentRole(), sessionStartTime));
 
