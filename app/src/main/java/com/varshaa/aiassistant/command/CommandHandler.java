@@ -30,7 +30,7 @@ public class CommandHandler {
         commandList.add(new ListModelsCommand());
         commandList.add(new SessionsCommand(conversationManager));
         commandList.add(new AboutCommand());
-        commandList.add(new SaveChatCommand(conversationManager));
+        commandList.add(new SaveChatCommand(conversationManager, ollamaService, config));
 
         // Don't add these to registry yet
         commandList.add(new RoleCommand(config));

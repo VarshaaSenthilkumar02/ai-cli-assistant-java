@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static java.nio.file.Files.createDirectories;
+import static java.nio.file.Files.writeString;
+
 public class ConversationStorage {
 
     private static final String FILE_NAME = "conversation.txt";
@@ -12,7 +15,7 @@ public class ConversationStorage {
     public void saveConversation(String conversationHistory) {
 
         try {
-            Files.writeString(Path.of(FILE_NAME), conversationHistory);
+            writeString(Path.of(FILE_NAME), conversationHistory);
         } catch (IOException e) {
             System.out.println("Unable to save conversation!");
         }
@@ -29,18 +32,19 @@ public class ConversationStorage {
         return "";
     }
 
-    public void exportConversation(String conversationHistory) {
+    public void exportConversation(String conversationHistory, String fileName) {
 
         try {
 
-            Files.createDirectories(Path.of("conversations"));
-            String fileName = "conversations/chat-" + System.currentTimeMillis() + ".txt";
+            createDirectories(Path.of("conversations"));
+//            String fileName = "conversations/chat-" + System.currentTimeMillis() + ".txt";
 
-            Files.writeString(
-                    Path.of(fileName),
+            writeString(
+                    Path.of("conversations", fileName + ".txt"),
                     conversationHistory
             );
-            System.out.println("Conversation exported to : " + fileName);
+            System.out.println(
+                    "Conversation exported to : conversations/" + fileName + ".txt");
         } catch (IOException e) {
             System.out.println("Unable to export conversation!");
         }

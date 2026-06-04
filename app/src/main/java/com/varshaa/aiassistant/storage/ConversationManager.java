@@ -58,8 +58,8 @@ public class ConversationManager {
         storage.saveConversation(persistentHistory.toString());
     }
 
-    public void saveConversation() {
-        storage.exportConversation(sessionHistory.toString());
+    public void saveConversation(String fileName) {
+        storage.exportConversation(sessionHistory.toString(), fileName);
     }
 
     public void listSessions() { storage.listConversations(); }
