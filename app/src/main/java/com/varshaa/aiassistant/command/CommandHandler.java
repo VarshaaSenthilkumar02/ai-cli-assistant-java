@@ -36,11 +36,12 @@ public class CommandHandler {
         commandList.add(new RoleCommand(config));
         commandList.add(new ModelCommand(config));
         commandList.add(new SummaryCommand(conversationManager, ollamaService, config));
+        commandList.add(new SearchCommand(conversationManager));
 
         for (Command command : commandList) {
 
             if(command.commandName().equals("/role") ||
-                    command.commandName().equals("/model")) {
+                    command.commandName().equals("/model") || command.commandName().equals("/search")) {
                 continue;
             }
 
@@ -72,6 +73,15 @@ public class CommandHandler {
 
             for(Command cmd : commandList) {
                 if(cmd.commandName().equals("/model")) {
+                    return cmd.execute(userInput);
+                }
+            }
+        }
+
+        if(userInput.startsWith("/search ")) {
+
+            for(Command cmd : commandList) {
+                if(cmd.commandName().equals("/search")) {
                     return cmd.execute(userInput);
                 }
             }

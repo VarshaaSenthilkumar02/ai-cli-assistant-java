@@ -45,6 +45,7 @@ public class AiAssistance {
                      /sessions
                      /exit
                      /summary
+                     /search
                  =====================================
                  """.formatted(config.getCurrentConfig(), config.getCurrentRole(), sessionStartTime));
 
