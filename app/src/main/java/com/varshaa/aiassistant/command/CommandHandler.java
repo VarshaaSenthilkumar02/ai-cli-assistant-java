@@ -37,6 +37,7 @@ public class CommandHandler {
         commandList.add(new ModelCommand(config));
         commandList.add(new SummaryCommand(conversationManager, ollamaService, config));
         commandList.add(new SearchCommand(conversationManager));
+        commandList.add(new CompressionSessionCommand(conversationManager));
 
         for (Command command : commandList) {
 

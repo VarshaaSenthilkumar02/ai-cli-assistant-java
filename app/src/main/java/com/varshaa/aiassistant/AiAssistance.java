@@ -19,7 +19,7 @@ public class AiAssistance {
                 DateTimeFormatter.ofPattern("hh:mm a");
         OllamaService aiModel = new OllamaService();
         AppConfig config = new AppConfig();
-        ConversationManager conversationManager = new ConversationManager();
+        ConversationManager conversationManager = new ConversationManager(aiModel, config);
         CommandHandler handler = new CommandHandler(conversationManager, config, aiModel);
         LocalDateTime startTime = LocalDateTime.now();
         String sessionStartTime = startTime.format(formatter);

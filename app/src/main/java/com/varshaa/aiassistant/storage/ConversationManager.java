@@ -1,15 +1,83 @@
 package com.varshaa.aiassistant.storage;
 
+import com.varshaa.aiassistant.config.AppConfig;
+import com.varshaa.aiassistant.service.OllamaService;
+
 public class ConversationManager {
 
     private final StringBuilder persistentHistory;
     private final ConversationStorage storage;
     private final StringBuilder sessionHistory;
+    private final OllamaService ollamaService;
+    private final AppConfig appConfig;
 
-    public ConversationManager() {
+    public ConversationManager(OllamaService ollamaService, AppConfig appConfig) {
         this.storage = new ConversationStorage();
         this.persistentHistory = new StringBuilder(storage.loadConversation());
         this.sessionHistory = new StringBuilder();
+        this.ollamaService = ollamaService;
+        this.appConfig = appConfig;
+    }
+
+    public void compressSession() {
+
+        String history = sessionHistory.toString();
+
+        if(history.isBlank()) {
+            System.out.println("No session history to compress.");
+            return;
+        }
+
+        String prompt = """
+            You are generating long-term memory for an AI assistant.
+            Do not summarize too aggressively.
+            Preserve all important technical concepts.
+
+            Extract and preserve ALL important information from the conversation.
+
+            Return ONLY structured memory in this format:
+
+            Technical Concepts:
+            - ...
+
+            Features Implemented:
+            - ...
+    
+            User Goals:
+            - ...
+
+            Important Decisions:
+            - ...
+
+            Keep all important technical discussions.
+            Do not omit concepts.
+            Do not add conversational text.
+            Do not summarize too aggressively.
+
+            Conversation:
+            %s
+            """.formatted(history);
+
+        try {
+
+            String summary =
+                    ollamaService.getAIResponse(
+                            prompt,
+                            appConfig.getCurrentConfig(),
+                            appConfig.getCurrentRole()
+                    );
+
+            sessionHistory.setLength(0);
+            sessionHistory.append("[SESSION SUMMARY]");
+            sessionHistory.append(summary);
+            System.out.println("Session compressed successfully!");
+            System.out.println(sessionHistory);
+
+        } catch (Exception e) {
+
+            System.out.println("Unable to compress session.");
+
+        }
     }
 
     public void addUserMessage(String message) {
