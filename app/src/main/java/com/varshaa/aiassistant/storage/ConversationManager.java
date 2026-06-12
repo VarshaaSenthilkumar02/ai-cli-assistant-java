@@ -3,6 +3,10 @@ package com.varshaa.aiassistant.storage;
 import com.varshaa.aiassistant.config.AppConfig;
 import com.varshaa.aiassistant.service.OllamaService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ConversationManager {
 
     private final StringBuilder persistentHistory;
@@ -10,6 +14,7 @@ public class ConversationManager {
     private final StringBuilder sessionHistory;
     private final OllamaService ollamaService;
     private final AppConfig appConfig;
+    private static final String MESSAGE_SEPARATOR = "\n---MESSAGE_SEPARATOR---\n";
 
     public ConversationManager(OllamaService ollamaService, AppConfig appConfig) {
         this.storage = new ConversationStorage();
@@ -17,6 +22,14 @@ public class ConversationManager {
         this.sessionHistory = new StringBuilder();
         this.ollamaService = ollamaService;
         this.appConfig = appConfig;
+    }
+
+    public void addToSession(String role, String message) {
+
+        sessionHistory.append(role);
+        sessionHistory.append(": ");
+        sessionHistory.append(message);
+        sessionHistory.append(MESSAGE_SEPARATOR);
     }
 
     public void compressSession() {
@@ -28,35 +41,58 @@ public class ConversationManager {
             return;
         }
 
+        String[] messages = history.split(MESSAGE_SEPARATOR);
+
+        List<String> sessionMessages = new ArrayList<>(Arrays.asList(messages));
+
+        // Number of recent raw messages to keep
+        int keepCount = 4;
+
+        // Avoid compressing very small conversations
+        if(sessionMessages.size() <= keepCount) {
+            System.out.println("Not enough conversation to compress yet.");
+            return;
+        }
+
+        // Get recent messages
+        int start = Math.max(0, sessionMessages.size() - keepCount);
+
+        List<String> recentMessages = sessionMessages.subList(start, sessionMessages.size());
+
+        // Older messages to summarize
+        List<String> oldMessages = sessionMessages.subList(0, start);
+
+        // Convert old messages into text block
+        String oldHistory = String.join(MESSAGE_SEPARATOR, oldMessages);
+
         String prompt = """
-            You are generating long-term memory for an AI assistant.
-            Do not summarize too aggressively.
-            Preserve all important technical concepts.
+        You are generating long-term memory for an AI assistant.
 
-            Extract and preserve ALL important information from the conversation.
+        Return ONLY raw memory.
 
-            Return ONLY structured memory in this format:
+        Do NOT add introductory sentences.
+        Do NOT explain the output.
 
-            Technical Concepts:
-            - ...
+        Start directly with:
 
-            Features Implemented:
-            - ...
-    
-            User Goals:
-            - ...
+        Technical Concepts:
+        - ...
 
-            Important Decisions:
-            - ...
+        Features Implemented:
+        - ...
 
-            Keep all important technical discussions.
-            Do not omit concepts.
-            Do not add conversational text.
-            Do not summarize too aggressively.
+        User Goals:
+        - ...
 
-            Conversation:
-            %s
-            """.formatted(history);
+        Important Decisions:
+        - ...
+
+        Preserve all important technical concepts.
+        Do not summarize too aggressively.
+
+        Conversation:
+        %s
+        """.formatted(oldHistory);
 
         try {
 
@@ -67,16 +103,30 @@ public class ConversationManager {
                             appConfig.getCurrentRole()
                     );
 
+            // Clear old session
             sessionHistory.setLength(0);
-            sessionHistory.append("[SESSION SUMMARY]");
+
+            // Add compressed summary
+            sessionHistory.append("[SESSION SUMMARY]\n\n");
             sessionHistory.append(summary);
+            sessionHistory.append(MESSAGE_SEPARATOR);
+
+            // Add recent raw messages
+            for(String recentMessage : recentMessages) {
+
+                sessionHistory.append(recentMessage);
+                sessionHistory.append(MESSAGE_SEPARATOR);
+            }
+
             System.out.println("Session compressed successfully!");
+
+            // Debugging output
             System.out.println(sessionHistory);
 
         } catch (Exception e) {
 
             System.out.println("Unable to compress session.");
-
+            System.out.println(e.getMessage());
         }
     }
 
