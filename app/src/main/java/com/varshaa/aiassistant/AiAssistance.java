@@ -78,7 +78,7 @@ public class AiAssistance {
             try {
 
                 System.out.print("\n[" + time + "]AI : ");
-                String aiResponse = aiModel.getAIResponse(conversationManager.getCurrentConversationContext(), model,
+                String aiResponse = aiModel.getAIResponse(conversationManager.getConversationForPrompt(), model,
                         role);
                 conversationManager.addAIMessage(aiResponse);
 

@@ -43,10 +43,13 @@ public class ConversationManager {
 
         String[] messages = history.split(MESSAGE_SEPARATOR);
 
-        List<String> sessionMessages = new ArrayList<>(Arrays.asList(messages));
+        List<String> sessionMessages =
+                Arrays.stream(messages)
+                        .filter(msg -> !msg.isBlank())
+                        .toList();
 
         // Number of recent raw messages to keep
-        int keepCount = 4;
+        int keepCount = 8; //later change this to pair count (user + AI response = 1)
 
         // Avoid compressing very small conversations
         if(sessionMessages.size() <= keepCount) {
@@ -72,6 +75,18 @@ public class ConversationManager {
 
         Do NOT add introductory sentences.
         Do NOT explain the output.
+        
+        You MUST return ONLY bullet point memory.
+                
+        INVALID RESPONSE EXAMPLE:
+        "Here are some points..."
+                
+        VALID RESPONSE EXAMPLE:
+                
+        Technical Concepts:
+            - JVM
+            - Heap
+                
 
         Start directly with:
 
@@ -89,6 +104,7 @@ public class ConversationManager {
 
         Preserve all important technical concepts.
         Do not summarize too aggressively.
+        Do not speak conversationally.
 
         Conversation:
         %s
@@ -131,6 +147,7 @@ public class ConversationManager {
     }
 
     public void addUserMessage(String message) {
+
         persistentHistory
                 .append("User: ")
                 .append(message)
@@ -138,7 +155,7 @@ public class ConversationManager {
         sessionHistory
                 .append("User: ")
                 .append(message)
-                .append("\n");
+                .append(MESSAGE_SEPARATOR);
         save();
     }
 
@@ -150,7 +167,7 @@ public class ConversationManager {
         sessionHistory
                 .append("AI: ")
                 .append(message)
-                .append("\n");
+                .append(MESSAGE_SEPARATOR);
         save();
     }
 
@@ -170,6 +187,13 @@ public class ConversationManager {
 
     public String getCurrentConversationContext() {
         return sessionHistory.toString();
+    }
+
+    public String getConversationForPrompt() {
+
+        return sessionHistory
+                .toString()
+                .replace(MESSAGE_SEPARATOR, "\n");
     }
 
     private void save() {
