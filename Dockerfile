@@ -11,6 +11,6 @@ FROM eclipse-temurin:25-jdk
 
 WORKDIR /app
 
-COPY target/ai-cli-assistant.jar app.jar
+COPY app/target/app-1.0-SNAPSHOT.jar app.jar
 
 CMD ["java", "-jar", "app.jar"]
